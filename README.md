@@ -248,6 +248,108 @@ The model is evaluated on a test set (20% of data) with:
 - Loss (Binary Crossentropy)
 - Early stopping based on validation loss
 
+## Model Comparison: Random Forest vs ANN
+
+To optimize performance and ensure the best model for production, we compared **Random Forest** (traditional ML) with **ANN** (deep learning) on the same dataset.
+
+### Overall Performance Summary
+
+| Metric | Random Forest | ANN | Winner |
+|--------|---------------|-----|--------|
+| **Accuracy** | 86.70% | 86.55% | 🏆 RF |
+| **Precision (Churn)** | 75.50% | 77.20% | 🏆 ANN |
+| **Recall (Churn)** | 47.80% | 44.80% | 🏆 RF |
+| **F1-Score (Churn)** | 58.20% | 57.60% | 🏆 RF |
+| **Specificity** | 96.20% | 96.80% | 🏆 ANN |
+| **ROC-AUC** | High | High | Comparable |
+
+### Confusion Matrix Analysis
+
+#### Random Forest
+```
+                True Negative  False Positive
+No Churn:           1546             61
+Churn:               205            188
+```
+- **True Positives (Churners Caught):** 188/393 (47.8%)
+- **False Negatives (Churners Missed):** 205/393 (52.2%)
+
+#### ANN
+```
+                True Negative  False Positive
+No Churn:           1555             52
+Churn:               217            176
+```
+- **True Positives (Churners Caught):** 176/393 (44.8%)
+- **False Negatives (Churners Missed):** 217/393 (55.2%)
+
+### Key Insights
+
+#### 1. **Churn Detection (Most Important for Business)**
+- **Random Forest catches 12 more churners** than ANN (188 vs 176)
+- This translates to 3% higher recall on the churn class
+- **Business Impact:** Better at identifying at-risk customers for retention campaigns
+
+#### 2. **False Positive Rate**
+- **Random Forest:** 61 false positives (wastes retention resources on 61 non-churners)
+- **ANN:** 52 false positives (slightly more efficient resource allocation)
+- **Trade-off:** RF catches more churners but has 9 more false alarms
+
+#### 3. **Model Characteristics**
+
+**Random Forest 🌲**
+- ✅ Catches more actual churners (higher recall)
+- ✅ Better F1-score (balanced precision-recall)
+- ✅ Faster predictions
+- ✅ Easier to interpret (feature importance available)
+- ✅ Smaller model (easier to deploy)
+- ⚠️ Slightly lower precision
+
+**ANN 🧠**
+- ✅ Higher precision (fewer false alarms)
+- ✅ Higher specificity (better at identifying non-churners)
+- ✅ Flexible architecture for future improvements
+- ⚠️ Catches fewer churners (lower recall)
+- ⚠️ Black-box model (harder to explain)
+- ⚠️ Requires TensorFlow/GPU (complex infrastructure)
+
+### Business Recommendation
+
+**🎯 DEPLOY: Random Forest**
+
+#### Rationale:
+1. **Higher Churn Detection Rate** - Catches 47.8% of actual churners vs ANN's 44.8%
+   - 12 additional churners identified = more customers saved
+   
+2. **Better Overall Accuracy** - 86.70% vs 86.55% on test set
+
+3. **Superior F1-Score** - 58.2% vs 57.6% (balanced performance)
+
+4. **Operational Benefits:**
+   - ✅ Simpler to deploy and maintain
+   - ✅ No deep learning framework dependencies
+   - ✅ Fast inference time (real-time predictions)
+   - ✅ Interpretable model (understand which features drive churn)
+   - ✅ Smaller model size (version control friendly)
+
+5. **Production Readiness:**
+   - Easier to retrain and update
+   - No GPU required
+   - More stable in production environment
+   - Better for explaining predictions to business stakeholders
+
+### Performance Visualization
+
+See [`model_comarision.ipynb`](model_comarision.ipynb) for detailed visualizations including:
+- ROC-AUC curves comparison
+- Confusion matrices side-by-side
+- Metric-by-metric bar charts
+- Classification reports
+
+### Conclusion
+
+While both models perform similarly (86.7% vs 86.55% accuracy), **Random Forest is the optimal choice** for this customer churn prediction problem. It provides the best balance between catching actual churners, operational simplicity, and production-readiness.
+
 ## Requirements
 
 See `requirements.txt` for complete list. Key dependencies:
